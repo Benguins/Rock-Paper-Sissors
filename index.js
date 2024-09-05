@@ -1,3 +1,9 @@
+const score = {
+  playerWins: 0,
+  computerWins: 0,
+  Ties: 0
+}
+
 function getComputerChoice(){
   let computerChoice;
   const randomNumber = Math.round(Math.random() * (2 - 0) + 0);
