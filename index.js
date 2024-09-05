@@ -9,6 +9,15 @@ function getComputerChoice(){
     computerChoice = 'scissors';
   } 
   return computerChoice;
-}
+};
 
-console.log(getComputerChoice());
+function getHumanChoice(){
+  const humanChoice = prompt('Pick a move, rock, paper or scissors').toLowerCase();
+  if(humanChoice === 'rock' || humanChoice === 'paper' || humanChoice === 'scissors'){
+    return humanChoice;
+  } else {
+    alert('Please pick a valid move');
+    location.reload();
+  }
+};
+
