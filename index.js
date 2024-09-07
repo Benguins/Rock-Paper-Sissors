@@ -8,66 +8,57 @@ function getComputerChoice(){
   let computerChoice;
   const randomNumber = Math.round(Math.random() * (2 - 0) + 0);
   if(randomNumber === 0){
-    computerChoice = 'rock';
+    computerChoice = 'Rock';
   } else if(randomNumber === 1){
-    computerChoice = 'paper';
+    computerChoice = 'Paper';
   } else if (randomNumber === 2){
-    computerChoice = 'scissors';
+    computerChoice = 'Scissors';
   } 
   return computerChoice;
 };
 
-function getHumanChoice(){
-  const humanChoice = prompt('Pick a move, rock, paper or scissors').toLowerCase();
-  if(humanChoice === 'rock' || humanChoice === 'paper' || humanChoice === 'scissors'){
-    return humanChoice;
-  } else {
-    alert('Please pick a valid move');
-    location.reload();
-  }
-};
-
-function playRound(){
+function playRound(value){
     const computerChoice = getComputerChoice();
-    const humanChoice = getHumanChoice();
+    const humanChoice = value
   
     let result;
   
-    if(humanChoice === 'rock' && computerChoice === 'rock'){
+    if(humanChoice === 'Rock' && computerChoice === 'Rock'){
       result = 'tied';
       score.Ties++;
-    } else if(humanChoice === 'rock' && computerChoice === 'paper'){
+    } else if(humanChoice === 'Rock' && computerChoice === 'Paper'){
       result = 'lost';
       score.computerWins++;
-    } else if(humanChoice === 'rock' && computerChoice === 'scissors'){
+    } else if(humanChoice === 'Rock' && computerChoice === 'Scissors'){
       result = 'win';
       score.playerWins++;
-    } else if(humanChoice === 'paper' && computerChoice === 'rock'){
+    } else if(humanChoice === 'Paper' && computerChoice === 'Rock'){
       result = 'win';
       score.playerWins++;
-    } else if(humanChoice === 'paper' && computerChoice === 'paper'){
+    } else if(humanChoice === 'Paper' && computerChoice === 'Paper'){
       result = 'tied';
       score.Ties++;
-    } else if(humanChoice === 'paper' && computerChoice === 'scissors'){
+    } else if(humanChoice === 'Paper' && computerChoice === 'Scissors'){
       result = 'lost';
       score.computerWins++;
-    } else if(humanChoice === 'scissors' && computerChoice === 'rock'){
+    } else if(humanChoice === 'Scissors' && computerChoice === 'Rock'){
       result = 'lost';
-      score.computerWins++;rock
-    } else if(humanChoice === 'scissors' && computerChoice === 'paper'){
+      score.computerWins++;
+    } else if(humanChoice === 'Scissors' && computerChoice === 'Paper'){
       result = 'win';
       score.playerWins++;
-    } else if(humanChoice === 'scissors' && computerChoice === 'scissors'){
+    } else if(humanChoice === 'Scissors' && computerChoice === 'Scissors'){
       result = 'tied';
       score.Ties++;
     }
-    console.log(`You picked ${humanChoice} the computer picked ${computerChoice} the result is, you ${result}`);
-    console.log(`The score is player score: ${score.playerWins} computer score: ${score.computerWins} and ties: ${score.Ties}`);
+    document.querySelector('.js-result').innerHTML = `You picked ${humanChoice} the computer picked ${computerChoice} the result is, you ${result}`;
+    document.querySelector('.js-score').innerHTML = `The score is player score: ${score.playerWins} computer score: ${score.computerWins} and ties: ${score.Ties}`;
 };
 
-function playGame(){
+function playGame(value){
+  const humanChoice = value;
   for(i = 0; i < 5; i++){
-    playRound();
+    playRound(humanChoice);
   }
   if(score.playerWins > score.computerWins){
     alert('You beat the computer!');
@@ -78,7 +69,69 @@ function playGame(){
   }
 }
 
-playGame();
+const choices = [
+  {
+    id: 'id1',
+    move: 'Rock'
+  }, 
+  {
+    id: 'id2',
+    move: 'Paper'
+  },
+  {
+    id: 'id3',
+    move: 'Scissors'
+  }
+];
+
+let html = '';
+choices.forEach((element) => {
+  html += `
+  <button class="selection-button" data-button-id = "${element.id}">${element.move}</button>
+  `
+  const container = document.querySelector('.flex-container').innerHTML = html;
+});
+
+
+document.querySelectorAll('.selection-button').forEach((button) => {
+  button.addEventListener('click', () => {
+    const elementId = button.dataset.buttonId;
+    let i = 0;
+    choices.forEach((element) => {
+      let matchingItem;
+      if(element.id === elementId){
+        matchingItem = element;
+      }
+      if(matchingItem){
+        const movePick = matchingItem.move;
+        playRound(movePick);
+        const modalResultText = document.querySelector('.js-modal-result');
+        const modal = document.querySelector('.js-modal');
+        if(score.playerWins === 5){
+          modal.style.display = "block";
+        modalResultText.innerHTML = 'You beat the computer!';
+        } else if(score.computerWins === 5){
+          modal.style.display = "block";
+          modalResultText.innerHTML = 'You lost to the computer!';
+        } else if(score.Ties === 5){
+          modal.style.display = "block";
+          modalResultText.innerHTML = 'You drew with the computer';
+        }
+      }
+    });
+  });
+});
+
+document.querySelectorAll('.js-modal-button').forEach((button) => {
+  button.addEventListener('click', () => {
+    if(button.innerText === 'Yes'){
+      location.reload();
+    } else if(button.innerText === 'No'){
+      window.close();
+    }
+  });
+});
+
 
 
 
