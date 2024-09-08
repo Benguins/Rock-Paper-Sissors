@@ -17,9 +17,18 @@ function getComputerChoice(){
   return computerChoice;
 };
 
-function playRound(value){
+function playRound(choice, playerImage){
     const computerChoice = getComputerChoice();
-    const humanChoice = value
+    const humanChoice = choice
+    let computerChoiceImage;
+
+    if(computerChoice === 'Rock'){
+      computerChoiceImage = './images/rock-emoji.png';
+    } else if(computerChoice === 'Paper'){
+      computerChoiceImage = './images/paper-emoji.png';
+    } else if(computerChoice === 'Scissors'){
+      computerChoiceImage = './images/scissors-emoji.png';
+    }
   
     let result;
   
@@ -51,7 +60,7 @@ function playRound(value){
       result = 'tied';
       score.Ties++;
     }
-    document.querySelector('.js-result').innerHTML = `You picked ${humanChoice} the computer picked ${computerChoice} the result is, you ${result}`;
+    document.querySelector('.js-result').innerHTML = `Your pick <img class="button-image" src="${playerImage}"> <img class="button-image" src="${computerChoiceImage}"> computer pick`;
     document.querySelector('.js-score').innerHTML = `The score is player score: ${score.playerWins} computer score: ${score.computerWins} and ties: ${score.Ties}`;
 };
 
@@ -72,22 +81,25 @@ function playGame(value){
 const choices = [
   {
     id: 'id1',
-    move: 'Rock'
+    move: 'Rock',
+    image: './images/rock-emoji.png'
   }, 
   {
     id: 'id2',
-    move: 'Paper'
+    move: 'Paper',
+    image: './images/paper-emoji.png'
   },
   {
     id: 'id3',
-    move: 'Scissors'
+    move: 'Scissors',
+    image: './images/scissors-emoji.png'
   }
 ];
 
 let html = '';
 choices.forEach((element) => {
   html += `
-  <button class="selection-button" data-button-id = "${element.id}">${element.move}</button>
+  <button class="selection-button" data-button-id = "${element.id}"><img src="${element.image}" class="button-image"></button>
   `
   const container = document.querySelector('.flex-container').innerHTML = html;
 });
@@ -104,7 +116,8 @@ document.querySelectorAll('.selection-button').forEach((button) => {
       }
       if(matchingItem){
         const movePick = matchingItem.move;
-        playRound(movePick);
+        const movePickImage = matchingItem.image;
+        playRound(movePick, movePickImage);
         const modalResultText = document.querySelector('.js-modal-result');
         const modal = document.querySelector('.js-modal');
         if(score.playerWins === 5){
